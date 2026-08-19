@@ -1,0 +1,4 @@
+{
+    "name": "Sample Plugin",
+    "description": "An example plugin folder showing the format the Plugins page looks for. Copy this folder, edit plugin.json, and drop your own plugin code alongside it."
+}

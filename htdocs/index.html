@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<!-- Load Chart.js first -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<!-- Load the date-fns adapter bundle (includes date-fns) -->
+<script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
+<head>
+	<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+	<meta http-equiv="Pragma" content="no-cache">
+	<meta http-equiv="Expires" content="0">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Project</title>
+    <!-- CSS Link -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+	<nav class="side-nav">
+		<div class="side-nav-header"><img src="images/A.png" />quaSense</div>
+		<a id="dashboard-button" href="#dashboard" class="side-nav-item"><img src="images/Dashboard.png" />Dashboard</a>
+		<a id="facility-button" href="#facility_location" class="side-nav-item"><img src="images/Facility-Location.png" />Facility Location</a>
+		<a id="profile-button" href="#profile" class="side-nav-item"><img src="images/Profile.png" />Profile</a>
+		<a id="care-plan-button" href="#care_plan" class="side-nav-item"><img src="images/Care-Plan.png" />Care Plan</a>
+		<a id="analytics-button" href="#analytics" class="side-nav-item"><img src="images/Analytics.png" />Analytics</a>
+		<a id="plugins-button" href="#plugins" class="side-nav-item"><img src="images/Plugins.png" />Plugins</a>
+		<a id="admin-button" href="#admin_users" class="side-nav-item"><img src="images/Admin-Users.png" />Admin Users</a>
+		<a id="settings-button" href="#settings" class="side-nav-item"><img src="images/Settings.png" />Settings</a>
+		<a id="logout-button" href="#logout" class="side-nav-logout"><img src="images/Logout.png" />Logout</a>
+	</nav>
+
+    <main class="content">
+		<div id="dashboard" style="display: none">
+			<div class="dashboard-top-bar">
+				<input type="text" id="dashboard-search" name="dashboard-search" placeholder="🔍 Search by room, location, name..." />
+				<p class="dashboard-header">Dashboard</p>
+				<div class="dashboard-options">
+					<span>
+						<button type="button" id="btn-dashboard-unselect">Unselect</button>
+						<button type="button" id="btn-dashboard-confirm">Confirm change</button>
+					</span>
+					<span>
+						<label class="dashboard-switch-label">Private mode</label>
+						<label class="dashboard-switch">
+						  <input type="checkbox" id="dashboard-private">
+						  <span class="dashboard-switch-slider round"></span>
+						</label>
+					</span>
+				</div>
+				<div class="dashboard-filter">
+					<!-- Options beyond "[All]" are populated dynamically by
+					script.js's populateSectionFilterDropdown(), grouped by
+					location, using real section names instead of hardcoded
+					placeholders. -->
+					<select name="dashboard-section" id="dashboard-section-dropdown">
+						<option value="0" selected>Filter by section [All]</option>
+					</select>
+					<select name="dashboard-colour" id="dashboard-colour-dropdown">
+						<option value="0" selected>Filter by colour [All]</option>
+						<option value="redalert">Red</option>
+						<option value="orangealert">Orange</option>
+						<option value="yellowalert">Yellow</option>
+						<option value="greenalert">Green</option>
+					</select>
+					<select name="dashboard-duration" id="dashboard-duration-dropdown">
+						<option value="0" selected>Filter by duration [All]</option>
+						<option value="1">10 - 15 Minutes</option>
+						<option value="2">5 - 10 Minutes</option>
+						<option value="3">0 - 5 Minutes</option>
+					</select>
+					<select name="dashboard-sort" id="dashboard-sort-dropdown">
+						<option value="0" selected>Sort by [Time]</option>
+						<option value="1">Section</option>
+						<option value="2">Name</option>
+					</select>
+				</div>
+			</div>
+			<div class="dashboard-main-content">
+			</div>
+			<div class="dashboard-item" style="display: none">
+				<input type="checkbox" id="myID" name="check-dashboard-item" value="myValue">
+				<label for="myID" class="dashboard-item-content">
+					<img src="images/Dashboard.png" alt="Dashboard" class="dashboard-side-image">
+					<div class="dashboard-text-content">
+						<h2 id="dashboard-location"></h2>
+						<p id="dashboard-name"></p>
+					</div>
+					<div class="dashboard-item-timer"></div>
+				</label>
+			</div>
+		</div>
+		<div id="facility" style="display: none">
+			<div class="main-content">
+				Facility Location
+			</div>
+		</div>
+		<div id="profile" style="display: none">
+			<div class="profile-top-bar">
+				<input type="text" id="profile-search" name="profile-search" placeholder="🔍 Search by room, location, name..." />
+				<div>
+					<span class="profile-search-result" style="display: none"></span>
+					<span class="profile-search-failed" style="display: none">No items match your search.</span>
+					<img class="profile-search-loading" src="images/search.gif" style="display: none" />
+					<div class="profile-search-results" style="display: none">
+					</div>
+				</div>
+				<p class="profile-header">Profile</p>
+			</div>
+			<div class="profile-main-content">
+				<div class="flex-row">
+					<img src="images/DP.png" class="profile-dp" />
+					<div class="flex-col">
+						<span class="profile-name"></span>
+						<span class="profile-location"></span>
+					</div>
+				</div>
+				<div class="profile-buttons">
+					<button type="button" id="btn-profile-careplan">Care plan</button>
+					<button type="button" id="btn-profile-analytics">Analytics</button>
+				</div>
+				<div id="profile-facility-controls"></div>
+			</div>
+		</div>
+		<div id="care-plan" style="display: none">
+			<div class="care-plan-top-bar">
+				<input type="text" id="care-plan-search" name="care-plan-search" placeholder="🔍 Search by room, location, name..." />
+				<div>
+					<span class="care-plan-search-result" style="display: none"></span>
+					<span class="care-plan-search-failed" style="display: none">No items match your search.</span>
+					<img class="care-plan-search-loading" src="images/search.gif" style="display: none" />
+					<div class="care-plan-search-results" style="display: none">
+					</div>
+				</div>
+				<p class="care-plan-header">Care Plan</p>
+			</div>
+			<div class="care-plan-main-content">
+				<div class="flex-row">
+					<img src="images/DP.png" class="care-plan-dp" />
+					<div class="flex-col">
+						<span class="care-plan-name"></span>
+						<span class="care-plan-location"></span>
+					</div>
+				</div>
+				<div class="care-plan-buttons">
+					<button type="button" id="btn-care-plan-profile">Profile</button>
+					<button type="button" id="btn-care-plan-analytics">Analytics</button>
+				</div>
+				<div id="care-plan-plan-container"></div>
+			</div>
+		</div>
+		<div id="analytics" style="display: none">
+			<div class="analytics-top-bar">
+				<input type="text" id="analytics-search" name="analytics-search" placeholder="🔍 Search by room, location, name..." />
+				<div>
+					<span class="analytics-search-result" style="display: none"></span>
+					<span class="analytics-search-failed" style="display: none">No items match your search.</span>
+					<img class="analytics-search-loading" src="images/search.gif" style="display: none" />
+					<div class="analytics-search-results" style="display: none">
+					</div>
+				</div>
+				<p class="analytics-header">Analytics</p>
+			</div>
+			<div class="analytics-main-content">
+				<div class="flex-row">
+					<img src="images/DP.png" class="analytics-dp" />
+					<div class="flex-col">
+						<span class="analytics-name"></span>
+						<span class="analytics-location"></span>
+					</div>
+				</div>
+				<div class="analytics-buttons">
+					<button type="button" id="btn-analytics-profile">Profile</button>
+					<button type="button" id="btn-analytics-care-plan">Care Plan</button>
+				</div>
+				<div>
+					<canvas id="myChart" style="width:100%;max-width:700px"></canvas>
+					<canvas id="myChart2" style="width:100%;max-width:700px"></canvas>
+				</div>
+			</div>
+		</div>
+		<div id="plugins" style="display: none">
+			<div class="main-content">
+				Plugins
+			</div>
+		</div>
+		<div id="admin" style="display: none">
+			<div class="main-content">
+				Admin
+			</div>
+		</div>
+		<div id="settings" style="display: none">
+			<div class="main-content">
+				Settings
+			</div>
+		</div>
+		<div id="login" style="display: none">
+			<div class="main-content">
+				Login
+			</div>
+		</div>
+    </main>
+
+	<script src="script.js"></script>
+	<script src="login.js"></script>
+	<script src="admin.js"></script>
+	<script src="account.js"></script>
+	<script src="facility.js"></script>
+	<script src="plugins.js"></script>
+	<script src="careplan.js"></script>
+	<script src="router.js"></script>
+</body>
+</html>
